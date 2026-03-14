@@ -1,0 +1,162 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-03-13T18:00:00.000Z",
+  "__export_source": "chatgpt",
+  "resources": [
+    {
+      "_id": "wrk_api_erp",
+      "_type": "workspace",
+      "name": "ERP API",
+      "description": "API de produtos, compras e vendas",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_api_erp",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8000/api/v1"
+      }
+    },
+    {
+      "_id": "fld_products",
+      "_type": "request_group",
+      "parentId": "wrk_api_erp",
+      "name": "Products"
+    },
+
+    {
+      "_id": "req_products_list",
+      "_type": "request",
+      "parentId": "fld_products",
+      "name": "List Products",
+      "method": "GET",
+      "url": "{{ base_url }}/products/list",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+
+    {
+      "_id": "req_products_save",
+      "_type": "request",
+      "parentId": "fld_products",
+      "name": "Create Product",
+      "method": "POST",
+      "url": "{{ base_url }}/products/save",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"data\": [\n    {\n      \"name\": \"Mouse Gamer\",\n      \"sku\": \"MOUSE-001\"\n    }\n  ]\n}"
+      }
+    },
+
+    {
+      "_id": "req_products_show",
+      "_type": "request",
+      "parentId": "fld_products",
+      "name": "Get Product by ID",
+      "method": "GET",
+      "url": "{{ base_url }}/products/by-id/1",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+
+    {
+      "_id": "req_products_update",
+      "_type": "request",
+      "parentId": "fld_products",
+      "name": "Update Product",
+      "method": "PUT",
+      "url": "{{ base_url }}/products/update/1",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Mouse Gamer RGB\",\n  \"sku\": \"MOUSE-001\"\n}"
+      }
+    },
+
+    {
+      "_id": "req_products_delete",
+      "_type": "request",
+      "parentId": "fld_products",
+      "name": "Delete Product",
+      "method": "DELETE",
+      "url": "{{ base_url }}/products/delete/1",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+
+    {
+      "_id": "fld_purchases",
+      "_type": "request_group",
+      "parentId": "wrk_api_erp",
+      "name": "Purchases"
+    },
+
+    {
+      "_id": "req_purchases_list",
+      "_type": "request",
+      "parentId": "fld_purchases",
+      "name": "List Purchases",
+      "method": "GET",
+      "url": "{{ base_url }}/purchases/list",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+
+    {
+      "_id": "req_purchases_save",
+      "_type": "request",
+      "parentId": "fld_purchases",
+      "name": "Create Purchase",
+      "method": "POST",
+      "url": "{{ base_url }}/purchases/save",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 10,\n      \"unit_cost\": 5.50\n    }\n  ]\n}"
+      }
+    },
+
+    {
+      "_id": "fld_sales",
+      "_type": "request_group",
+      "parentId": "wrk_api_erp",
+      "name": "Sales"
+    },
+
+    {
+      "_id": "req_sales_list",
+      "_type": "request",
+      "parentId": "fld_sales",
+      "name": "List Sales",
+      "method": "GET",
+      "url": "{{ base_url }}/sales/list",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+
+    {
+      "_id": "req_sales_save",
+      "_type": "request",
+      "parentId": "fld_sales",
+      "name": "Create Sale",
+      "method": "POST",
+      "url": "{{ base_url }}/sales/save",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 2,\n      \"unit_price\": 20\n    }\n  ]\n}"
+      }
+    }
+  ]
+}

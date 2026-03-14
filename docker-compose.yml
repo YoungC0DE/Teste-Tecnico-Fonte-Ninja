@@ -1,0 +1,37 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: ./Backend
+      dockerfile: Docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Backend:/var/www
+    depends_on:
+      - mysql
+
+  vue:
+    container_name: vue
+    build:
+      context: ./Frontend
+      dockerfile: Docker/Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: estoque
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: ninja
+      MYSQL_USER: ninja
+    ports:
+      - "3306:3306"
+
+networks: 
+  default: 
+    name: estoque-network
