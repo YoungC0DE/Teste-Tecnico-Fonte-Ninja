@@ -91,8 +91,11 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/produtos?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/produtos?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/produtos?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/produtos","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -208,8 +211,11 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: '{"error":"Product not found"}'
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -394,8 +400,11 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/compras?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/compras?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/compras?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/compras","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -572,8 +581,11 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/vendas?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/vendas?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/vendas?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/vendas","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
