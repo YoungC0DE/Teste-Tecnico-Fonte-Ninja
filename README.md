@@ -9,7 +9,7 @@ O sistema permite registrar operações de estoque e acompanhar o impacto dessas
 ---
 
 # 📦 Estrutura do Projeto
-
+```
 .
 ├── Backend
 │   ├── app
@@ -27,6 +27,7 @@ O sistema permite registrar operações de estoque e acompanhar o impacto dessas
 ├── docker-compose.yml
 ├── import_file_endpoints_insomnia.json
 └── README.md
+```
 
 ---
 
