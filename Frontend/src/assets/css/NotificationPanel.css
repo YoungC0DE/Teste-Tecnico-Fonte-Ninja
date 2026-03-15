@@ -1,0 +1,87 @@
+.notifications-panel {
+  width: 320px;
+}
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border-radius: 6px;
+  border: 1px solid;
+  padding: 5px;
+  font-size: 10pt;
+}
+
+.notification-title {
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.notification-detail {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.notification-date {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.notifications-empty {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
+}
+
+/* SUCCESS */
+
+.notification-success {
+  border-color: var(--p-green-500);
+  background-color: color-mix(in srgb, var(--p-green-500) 15%, transparent);
+}
+
+.notification-success .notification-title,
+.notification-success i {
+  color: var(--p-green-500);
+}
+
+/* WARN */
+
+.notification-warn {
+  border-color: var(--p-yellow-500);
+  background-color: color-mix(in srgb, var(--p-yellow-500) 15%, transparent);
+}
+
+.notification-warn .notification-title,
+.notification-warn i {
+  color: var(--p-yellow-500);
+}
+
+/* ERROR */
+
+.notification-error {
+  border-color: var(--p-red-500);
+  background-color: color-mix(in srgb, var(--p-red-500) 15%, transparent);
+}
+
+.notification-error .notification-title,
+.notification-error i {
+  color: var(--p-red-500);
+}

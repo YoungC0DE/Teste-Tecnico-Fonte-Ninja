@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    zip
+    zip \
+    libssl-dev
 
 RUN docker-php-ext-install \
     pdo \
@@ -15,6 +16,10 @@ RUN docker-php-ext-install \
     mbstring \
     bcmath \
     gd
+
+# Redis extension for caching
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

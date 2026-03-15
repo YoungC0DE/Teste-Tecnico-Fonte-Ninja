@@ -14,11 +14,15 @@ return new class extends Migration
     {
         Schema::create(Product::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // nome do produto
-            $table->string('sku')->unique(); // identificador
-            $table->unsignedInteger('stock')->default(0); // quantidade atual
-            $table->decimal('average_cost', 10, 2)->default(0); // custo médio do produto
+            $table->string('nome'); // nome do produto
+            $table->unsignedInteger('estoque')->default(0); // quantidade atual
+            $table->decimal('custo_medio', 10, 2)->default(0); // custo médio do produto
+            $table->decimal('preco_venda', 10, 2)->default(0); // preço de venda sugerido
             $table->timestamps();
+
+            // Índices
+            $table->index('nome');
+            $table->index('preco_venda');
         });
     }
 

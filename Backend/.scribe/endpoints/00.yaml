@@ -45,7 +45,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/products/list
+    uri: api/v1/produtos
     metadata:
       custom: []
       groupName: Endpoints
@@ -90,7 +90,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/products\/list?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/products\/list?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/products\/list?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/products\/list","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/produtos?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/produtos?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/produtos?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/produtos","per_page":15,"prev_page_url":null,"to":null,"total":0}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -105,29 +105,22 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/products/save
+    uri: api/v1/produtos
     metadata:
       custom: []
       groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Criar produtos'
+      title: 'Criar produto'
       description: |-
-        Cria um ou mais produtos no sistema.
-
-        O endpoint recebe um array de produtos no campo `data`.
-        Para cada produto, é verificado se já existe um produto com o mesmo `sku`.
+        Cria um novo produto no sistema.
 
         Regras:
-        - Produtos com SKU duplicado são ignorados.
-        - Produtos válidos são criados com `stock` inicial igual a 0.
-        - O custo médio (`average_cost`) é iniciado com 0.
-
-        Ao final da execução, é retornado um resumo contendo:
-        - Quantidade de produtos criados
-        - Quantidade de erros
-        - Quantidade de produtos duplicados
+        - `nome` é obrigatório e deve ter ao menos 3 caracteres
+        - `preco_venda` é obrigatório e deve ser maior que zero
+        - O estoque inicial é definido como 0
+        - O custo médio é iniciado como 0
       authenticated: false
       deprecated: false
     headers:
@@ -138,21 +131,9 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      data:
+      nome:
         custom: []
-        name: data
-        description: 'Lista de produtos a serem criados.'
-        required: true
-        example:
-          - architecto
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'data[].name':
-        custom: []
-        name: 'data[].name'
+        name: nome
         description: 'Nome do produto.'
         required: true
         example: '"Notebook Dell".'
@@ -161,20 +142,20 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'data[].sku':
+      preco_venda:
         custom: []
-        name: 'data[].sku'
-        description: 'SKU único do produto.'
+        name: preco_venda
+        description: 'Preço de venda sugerido.'
         required: true
-        example: '"NOTEBOOK-DELL-123".'
-        type: string
+        example: 250.0
+        type: number
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      data:
-        - architecto
+      nome: '"Notebook Dell".'
+      preco_venda: 250.0
     fileParameters: []
     responses: []
     responseFields: []
@@ -186,7 +167,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/products/by-id/{productId}'
+    uri: 'api/v1/produtos/{productId}'
     metadata:
       custom: []
       groupName: Endpoints
@@ -241,7 +222,7 @@ endpoints:
     custom: []
     httpMethods:
       - PUT
-    uri: 'api/v1/products/update/{productId}'
+    uri: 'api/v1/produtos/{productId}'
     metadata:
       custom: []
       groupName: Endpoints
@@ -253,8 +234,8 @@ endpoints:
         Atualiza os dados de um produto existente.
 
         Os campos que podem ser atualizados são:
-        - `name`
-        - `sku`
+        - `nome`
+        - `preco_venda`
 
         Caso o produto não seja encontrado, será retornado erro 404.
       authenticated: false
@@ -279,9 +260,9 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
+      nome:
         custom: []
-        name: name
+        name: nome
         description: 'Nome do produto.'
         required: false
         example: '"Notebook Dell Inspiron".'
@@ -290,20 +271,20 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      sku:
+      preco_venda:
         custom: []
-        name: sku
-        description: 'SKU do produto.'
+        name: preco_venda
+        description: 'Preço de venda sugerido.'
         required: false
-        example: '"NOTEBOOK-DELL-INSPIRON-123".'
-        type: string
+        example: 350.0
+        type: number
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: '"Notebook Dell Inspiron".'
-      sku: '"NOTEBOOK-DELL-INSPIRON-123".'
+      nome: '"Notebook Dell Inspiron".'
+      preco_venda: 350.0
     fileParameters: []
     responses: []
     responseFields: []
@@ -315,7 +296,7 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/v1/products/delete/{productId}'
+    uri: 'api/v1/produtos/{productId}'
     metadata:
       custom: []
       groupName: Endpoints
@@ -361,7 +342,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/purchases/list
+    uri: api/v1/compras
     metadata:
       custom: []
       groupName: Endpoints
@@ -412,7 +393,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/purchases\/list?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/purchases\/list?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/purchases\/list?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/purchases\/list","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/compras?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/compras?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/compras?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/compras","per_page":15,"prev_page_url":null,"to":null,"total":0}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -427,7 +408,7 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/purchases/save
+    uri: api/v1/compras
     metadata:
       custom: []
       groupName: Endpoints
@@ -468,10 +449,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      items:
+      fornecedor:
         custom: []
-        name: items
-        description: 'Lista de itens da compra.'
+        name: fornecedor
+        description: 'Nome do fornecedor.'
+        required: true
+        example: '"Fornecedor X".'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      produtos:
+        custom: []
+        name: produtos
+        description: 'Lista de produtos da compra.'
         required: true
         example:
           - architecto
@@ -480,9 +472,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      'items[].product_id':
+      'produtos[].id':
         custom: []
-        name: 'items[].product_id'
+        name: 'produtos[].id'
         description: 'ID do produto.'
         required: true
         example: 5
@@ -491,9 +483,9 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'items[].quantity':
+      'produtos[].quantidade':
         custom: []
-        name: 'items[].quantity'
+        name: 'produtos[].quantidade'
         description: 'Quantidade comprada do produto.'
         required: true
         example: 10
@@ -502,10 +494,10 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'items[].unit_cost':
+      'produtos[].preco_unitario':
         custom: []
-        name: 'items[].unit_cost'
-        description: 'Custo unitário do produto na compra.'
+        name: 'produtos[].preco_unitario'
+        description: 'Preço unitário da compra.'
         required: true
         example: 25.5
         type: number
@@ -514,7 +506,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      items:
+      fornecedor: '"Fornecedor X".'
+      produtos:
         - architecto
     fileParameters: []
     responses: []
@@ -527,7 +520,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/sales/list
+    uri: api/v1/vendas
     metadata:
       custom: []
       groupName: Endpoints
@@ -578,7 +571,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/sales\/list?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/sales\/list?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/sales\/list?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/sales\/list","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/vendas?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/vendas?page=1","links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost\/api\/v1\/vendas?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/vendas","per_page":15,"prev_page_url":null,"to":null,"total":0}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -593,7 +586,7 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/sales/save
+    uri: api/v1/vendas
     metadata:
       custom: []
       groupName: Endpoints
@@ -640,10 +633,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      items:
+      cliente:
         custom: []
-        name: items
-        description: 'Lista de itens da venda.'
+        name: cliente
+        description: 'Nome do cliente.'
+        required: true
+        example: '"Fulano da Silva".'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      produtos:
+        custom: []
+        name: produtos
+        description: 'Lista de produtos da venda.'
         required: true
         example:
           - architecto
@@ -652,9 +656,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      'items[].product_id':
+      'produtos[].id':
         custom: []
-        name: 'items[].product_id'
+        name: 'produtos[].id'
         description: 'ID do produto.'
         required: true
         example: 5
@@ -663,9 +667,9 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'items[].quantity':
+      'produtos[].quantidade':
         custom: []
-        name: 'items[].quantity'
+        name: 'produtos[].quantidade'
         description: 'Quantidade vendida do produto.'
         required: true
         example: 10
@@ -674,9 +678,9 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'items[].unit_price':
+      'produtos[].preco_unitario':
         custom: []
-        name: 'items[].unit_price'
+        name: 'produtos[].preco_unitario'
         description: 'Preço unitário de venda do produto.'
         required: true
         example: 50.0
@@ -686,7 +690,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      items:
+      cliente: '"Fulano da Silva".'
+      produtos:
         - architecto
     fileParameters: []
     responses: []

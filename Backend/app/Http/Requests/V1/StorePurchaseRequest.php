@@ -17,10 +17,32 @@ class StorePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'items' => ['required', 'array', 'min:1'],
-            'items.*.product_id' => ['required'],
-            'items.*.quantity' => ['required', 'integer', 'min:1'],
-            'items.*.unit_cost' => ['required', 'numeric', 'min:0']
+            'fornecedor' => ['required', 'string', 'max:255'],
+            'produtos' => ['required', 'array', 'min:1'],
+            'produtos.*.id' => ['required', 'integer', 'exists:products,id'],
+            'produtos.*.quantidade' => ['required', 'integer', 'min:1'],
+            'produtos.*.preco_unitario' => ['required', 'numeric', 'min:0.01'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'fornecedor.required' => 'O nome do fornecedor é obrigatório',
+            'fornecedor.string' => 'O fornecedor deve ser um texto',
+            'fornecedor.max' => 'O fornecedor deve ter no máximo 255 caracteres',
+            'produtos.required' => 'Adicione pelo menos um produto',
+            'produtos.array' => 'Os produtos devem ser um array',
+            'produtos.min' => 'Adicione pelo menos um produto',
+            'produtos.*.id.required' => 'Selecione um produto',
+            'produtos.*.id.integer' => 'O ID do produto deve ser um número',
+            'produtos.*.id.exists' => 'O produto selecionado não existe',
+            'produtos.*.quantidade.required' => 'A quantidade é obrigatória',
+            'produtos.*.quantidade.integer' => 'A quantidade deve ser um número inteiro',
+            'produtos.*.quantidade.min' => 'A quantidade deve ser no mínimo 1',
+            'produtos.*.preco_unitario.required' => 'O preço unitário é obrigatório',
+            'produtos.*.preco_unitario.numeric' => 'O preço deve ser um número',
+            'produtos.*.preco_unitario.min' => 'O preço deve ser no mínimo R$ 0,01',
         ];
     }
 

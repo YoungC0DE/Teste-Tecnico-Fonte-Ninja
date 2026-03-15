@@ -1,0 +1,9 @@
+/* CSS Principal - Importa todos os módulos de CSS */
+
+@import './global.css';
+@import './layout.css';
+@import './menu.css';
+@import './responsive.css';
+@import './primevue.css';
+@import './forms.css';
+@import './loading.css';

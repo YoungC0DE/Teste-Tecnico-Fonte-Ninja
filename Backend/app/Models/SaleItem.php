@@ -11,11 +11,11 @@ class SaleItem extends Model
     protected $fillable = [
         'sale_id',
         'product_id',
-        'quantity',
-        'unit_price',
-        'total_price',
-        'unit_cost',
-        'profit',
+        'quantidade',
+        'preco_unitario',
+        'total_preco',
+        'custo_unitario',
+        'lucro',
     ];
 
     public function sale()

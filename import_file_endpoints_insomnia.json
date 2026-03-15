@@ -1,13 +1,13 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2026-03-13T18:00:00.000Z",
+  "__export_date": "2026-03-15T00:00:00.000Z",
   "__export_source": "chatgpt",
   "resources": [
     {
       "_id": "wrk_api_erp",
       "_type": "workspace",
-      "name": "ERP API",
+      "name": "estoque-erp/v1",
       "description": "API de produtos, compras e vendas",
       "scope": "collection"
     },
@@ -21,141 +21,102 @@
       }
     },
     {
-      "_id": "fld_products",
+      "_id": "fld_root",
       "_type": "request_group",
       "parentId": "wrk_api_erp",
-      "name": "Products"
+      "name": "estoque-erp/v1"
     },
-
     {
-      "_id": "req_products_list",
-      "_type": "request",
-      "parentId": "fld_products",
-      "name": "List Products",
-      "method": "GET",
-      "url": "{{ base_url }}/products/list",
-      "headers": [{ "name": "Accept", "value": "application/json" }]
-    },
-
-    {
-      "_id": "req_products_save",
-      "_type": "request",
-      "parentId": "fld_products",
-      "name": "Create Product",
-      "method": "POST",
-      "url": "{{ base_url }}/products/save",
-      "headers": [
-        { "name": "Content-Type", "value": "application/json" },
-        { "name": "Accept", "value": "application/json" }
-      ],
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"data\": [\n    {\n      \"name\": \"Mouse Gamer\",\n      \"sku\": \"MOUSE-001\"\n    }\n  ]\n}"
-      }
-    },
-
-    {
-      "_id": "req_products_show",
-      "_type": "request",
-      "parentId": "fld_products",
-      "name": "Get Product by ID",
-      "method": "GET",
-      "url": "{{ base_url }}/products/by-id/1",
-      "headers": [{ "name": "Accept", "value": "application/json" }]
-    },
-
-    {
-      "_id": "req_products_update",
-      "_type": "request",
-      "parentId": "fld_products",
-      "name": "Update Product",
-      "method": "PUT",
-      "url": "{{ base_url }}/products/update/1",
-      "headers": [
-        { "name": "Content-Type", "value": "application/json" },
-        { "name": "Accept", "value": "application/json" }
-      ],
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"name\": \"Mouse Gamer RGB\",\n  \"sku\": \"MOUSE-001\"\n}"
-      }
-    },
-
-    {
-      "_id": "req_products_delete",
-      "_type": "request",
-      "parentId": "fld_products",
-      "name": "Delete Product",
-      "method": "DELETE",
-      "url": "{{ base_url }}/products/delete/1",
-      "headers": [{ "name": "Accept", "value": "application/json" }]
-    },
-
-    {
-      "_id": "fld_purchases",
+      "_id": "fld_produtos",
       "_type": "request_group",
-      "parentId": "wrk_api_erp",
-      "name": "Purchases"
+      "parentId": "fld_root",
+      "name": "Produtos"
     },
-
     {
-      "_id": "req_purchases_list",
+      "_id": "req_produtos_list",
       "_type": "request",
-      "parentId": "fld_purchases",
-      "name": "List Purchases",
+      "parentId": "fld_produtos",
+      "name": "Listar Produtos",
       "method": "GET",
-      "url": "{{ base_url }}/purchases/list",
+      "url": "{{ base_url }}/produtos",
       "headers": [{ "name": "Accept", "value": "application/json" }]
     },
-
     {
-      "_id": "req_purchases_save",
+      "_id": "req_produtos_save",
       "_type": "request",
-      "parentId": "fld_purchases",
-      "name": "Create Purchase",
+      "parentId": "fld_produtos",
+      "name": "Cadastrar Produto",
       "method": "POST",
-      "url": "{{ base_url }}/purchases/save",
+      "url": "{{ base_url }}/produtos",
       "headers": [
         { "name": "Content-Type", "value": "application/json" },
         { "name": "Accept", "value": "application/json" }
       ],
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 10,\n      \"unit_cost\": 5.50\n    }\n  ]\n}"
+        "text": "{\n  \"nome\": \"Mouse Gamer\",\n  \"preco_venda\": 25.00\n}"
       }
     },
-
     {
-      "_id": "fld_sales",
+      "_id": "fld_compras",
       "_type": "request_group",
-      "parentId": "wrk_api_erp",
-      "name": "Sales"
+      "parentId": "fld_root",
+      "name": "Compras"
     },
-
     {
-      "_id": "req_sales_list",
+      "_id": "req_compras_list",
       "_type": "request",
-      "parentId": "fld_sales",
-      "name": "List Sales",
+      "parentId": "fld_compras",
+      "name": "Listar Compras",
       "method": "GET",
-      "url": "{{ base_url }}/sales/list",
+      "url": "{{ base_url }}/compras",
       "headers": [{ "name": "Accept", "value": "application/json" }]
     },
-
     {
-      "_id": "req_sales_save",
+      "_id": "req_compras_save",
       "_type": "request",
-      "parentId": "fld_sales",
-      "name": "Create Sale",
+      "parentId": "fld_compras",
+      "name": "Registrar Compra",
       "method": "POST",
-      "url": "{{ base_url }}/sales/save",
+      "url": "{{ base_url }}/compras",
       "headers": [
         { "name": "Content-Type", "value": "application/json" },
         { "name": "Accept", "value": "application/json" }
       ],
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 2,\n      \"unit_price\": 20\n    }\n  ]\n}"
+        "text": "{\n  \"fornecedor\": \"Fornecedor X\",\n  \"produtos\": [\n    {\n      \"id\": 1,\n      \"quantidade\": 10,\n      \"preco_unitario\": 5.50\n    }\n  ]\n}"
+      }
+    },
+    {
+      "_id": "fld_vendas",
+      "_type": "request_group",
+      "parentId": "fld_root",
+      "name": "Vendas"
+    },
+    {
+      "_id": "req_vendas_list",
+      "_type": "request",
+      "parentId": "fld_vendas",
+      "name": "Listar Vendas",
+      "method": "GET",
+      "url": "{{ base_url }}/vendas",
+      "headers": [{ "name": "Accept", "value": "application/json" }]
+    },
+    {
+      "_id": "req_vendas_save",
+      "_type": "request",
+      "parentId": "fld_vendas",
+      "name": "Registrar Venda",
+      "method": "POST",
+      "url": "{{ base_url }}/vendas",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cliente\": \"Fulano da Silva\",\n  \"produtos\": [\n    {\n      \"id\": 1,\n      \"quantidade\": 2,\n      \"preco_unitario\": 20.00\n    }\n  ]\n}"
       }
     }
   ]

@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,74 +33,75 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        if ($request->has('search')) {
-            $search = trim(strtolower($request->input('search')));
-            $products = Product::whereLike('name', "%$search%")
-                ->orWhereLike('sku', "%$search%")
-                ->paginate();
-        } else {
-            $products = Product::paginate();
-        }
+        $page = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 15);
+        $search = trim(strtolower($request->input('search', '')));
+
+        $cacheKey = "produtos:page:{$page}:per_page:{$perPage}:search:{$search}";
+
+        $products = Cache::tags(['produtos'])->remember($cacheKey, 60, function () use ($search, $perPage) {
+            $query = Product::query();
+
+            if ($search !== '') {
+                $query->whereLike('nome', "%{$search}%");
+            }
+
+            return $query->paginate($perPage);
+        });
+
+        // Adaptar saída para os campos esperados pelo frontend
+        $products->getCollection()->transform(function (Product $product) {
+            $data = $product->toArray();
+            $data["created_at"] = Carbon::parse($product->created_at)->format('Y-m-d');
+            $data["updated_at"] = Carbon::parse($product->updated_at)->format('Y-m-d');
+
+            // Formatação monetária para exibição (R$ 100,00)
+            $data["custo_medio"] = 'R$ ' . number_format((float) $product->custo_medio, 2, ',', '.');
+            $data["preco_venda"] = 'R$ ' . number_format((float) $product->preco_venda, 2, ',', '.');
+
+            return $data;
+        });
 
         return $this->jsonResponse($products);
     }
 
     /**
-     * Criar produtos
+     * Criar produto
      *
-     * Cria um ou mais produtos no sistema.
-     * 
-     * O endpoint recebe um array de produtos no campo `data`.
-     * Para cada produto, é verificado se já existe um produto com o mesmo `sku`.
-     * 
+     * Cria um novo produto no sistema.
+     *
      * Regras:
-     * - Produtos com SKU duplicado são ignorados.
-     * - Produtos válidos são criados com `stock` inicial igual a 0.
-     * - O custo médio (`average_cost`) é iniciado com 0.
-     * 
-     * Ao final da execução, é retornado um resumo contendo:
-     * - Quantidade de produtos criados
-     * - Quantidade de erros
-     * - Quantidade de produtos duplicados
+     * - `nome` é obrigatório e deve ter ao menos 3 caracteres
+     * - `preco_venda` é obrigatório e deve ser maior que zero
+     * - O estoque inicial é definido como 0
+     * - O custo médio é iniciado como 0
      *
      * @param StoreProductRequest $request
-     * 
-     * @bodyParam data array required Lista de produtos a serem criados.
-     * @bodyParam data[].name string required Nome do produto. Example: "Notebook Dell".
-     * @bodyParam data[].sku string required SKU único do produto. Example: "NOTEBOOK-DELL-123".
-     * 
+     *
+     * @bodyParam nome string required Nome do produto. Example: "Notebook Dell".
+     * @bodyParam preco_venda number required Preço de venda sugerido. Example: 250.00
+     *
      * @return JsonResponse
      */
     public function store(StoreProductRequest $request): JsonResponse
     {
-        $success = 0;
-        $error = 0;
-        $duplicated = 0;
+        try {
+            $product = Product::create([
+                'nome' => $request->input('nome'),
+                'estoque' => 0,
+                'custo_medio' => 0,
+                'preco_venda' => $request->input('preco_venda'),
+            ]);
 
-        $products = $request->input('data', []);
+            // Limpa cache para garantir que a lista de produtos seja atualizada
+            Cache::tags(['produtos'])->flush();
 
-        foreach ($products as $product) {
-            if (Product::where('sku', $product['sku'])->exists()) {
-                $duplicated++;
-                continue;
-            }
+            return $this->jsonResponse($product, Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            Log::error("Error creating product: " . $e->getMessage());
 
-            try {
-                Product::create([
-                    'name' => $product['name'],
-                    'sku' => $product['sku'],
-                    'stock' => 0,
-                    'average_cost' => 0
-                ]);
-
-                $success++;
-            } catch (\Exception $e) {
-                Log::error("Error creating product: " . $e->getMessage());
-                $error++;
-            }
+            return $this->errorResponse('Erro ao criar produto', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->successResponse("Criados: $success, Erros: $error, Duplicados: $duplicated", 201);
     }
 
     /**
@@ -115,7 +118,9 @@ class ProductController extends Controller
      */
     public function show(string $productId): JsonResponse
     {
-        $product = Product::find($productId);
+        $product = Cache::tags(['produtos'])->remember("produto:{$productId}", 60, function () use ($productId) {
+            return Product::find($productId);
+        });
 
         if (empty($product)) {
             return $this->errorResponse("Product not found", Response::HTTP_NOT_FOUND);
@@ -128,21 +133,21 @@ class ProductController extends Controller
      * Atualizar produto
      *
      * Atualiza os dados de um produto existente.
-     * 
+     *
      * Os campos que podem ser atualizados são:
-     * - `name`
-     * - `sku`
+     * - `nome`
+     * - `preco_venda`
      *
      * Caso o produto não seja encontrado, será retornado erro 404.
      *
      * @param string $productId
      * @param Request $request
-     * 
+     *
      * @urlParam productId string required ID do produto. Example: 12
-     * 
-     * @bodyParam name string Nome do produto. Example: "Notebook Dell Inspiron".
-     * @bodyParam sku string SKU do produto. Example: "NOTEBOOK-DELL-INSPIRON-123".
-     * 
+     *
+     * @bodyParam nome string Nome do produto. Example: "Notebook Dell Inspiron".
+     * @bodyParam preco_venda number Preço de venda sugerido. Example: 350.00
+     *
      * @return JsonResponse
      */
     public function update(string $productId, Request $request): JsonResponse
@@ -153,9 +158,13 @@ class ProductController extends Controller
             return $this->errorResponse("Product not found", Response::HTTP_NOT_FOUND);
         }
 
-        $product->update(
-            $request->only(['name', 'sku'])
-        );
+        $product->update([
+            'nome' => $request->input('nome', $product->nome),
+            'preco_venda' => $request->input('preco_venda', $product->preco_venda),
+        ]);
+
+        // Limpa cache para garantir que os dados atualizados sejam retornados
+        Cache::tags(['produtos'])->flush();
 
         return $this->jsonResponse($product);
     }
@@ -182,6 +191,9 @@ class ProductController extends Controller
         }
 
         $product->delete();
+
+        // Limpa cache para garantir que a lista de produtos seja atualizada
+        Cache::tags(['produtos'])->flush();
 
         return $this->jsonResponse([], Response::HTTP_NO_CONTENT);
     }

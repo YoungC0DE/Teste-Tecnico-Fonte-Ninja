@@ -1,0 +1,41 @@
+/* PRIMEVUE OVERRIDES */
+
+.p-card,
+.card {
+  border: none;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* Remove qualquer sombra padrão de superfícies PrimeVue */
+.p-component,
+.p-toolbar,
+.p-menubar,
+.p-panel,
+.p-datatable,
+.p-dialog,
+.p-sidebar {
+  box-shadow: none !important;
+}
+
+/* INPUT STYLES */
+
+.p-inputtext,
+.p-inputnumber-input,
+.p-dropdown {
+  width: 100% !important;
+}
+
+.p-inputtext,
+.p-inputnumber .p-inputnumber-input,
+.p-dropdown .p-dropdown-trigger {
+  box-sizing: border-box;
+}
+
+/* Garante que inputs dentro de flex containers tenham 100% */
+.flex .p-inputtext,
+.flex .p-inputnumber,
+.flex .p-inputnumber-input,
+.flex .p-dropdown {
+  width: 100% !important;
+}

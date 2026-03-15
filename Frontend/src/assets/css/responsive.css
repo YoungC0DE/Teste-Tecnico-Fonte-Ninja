@@ -1,0 +1,213 @@
+/* Sidebar modo mobile (overlay) */
+@media (max-width: 1023px) {
+  .layout-body {
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  .sidebar-mask ~ .layout-body {
+    overflow-y: auto;
+  }
+
+  .layout-sidebar {
+    position: fixed;
+    top: 75px;
+    left: 15px;
+    bottom: 0;
+    transform: translateX(-120%);
+    border-radius: 6px;
+    width: 14rem;
+    z-index: 900;
+    height: calc(100vh - 60px);
+  }
+
+  .layout-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .layout-wrapper:has(.sidebar-mask) {
+    overflow: hidden;
+  }
+
+  .layout-menu-section ul {
+    padding: 0 1rem;
+  }
+
+  /* Garante que inputs em mobile tenham 100% de largura */
+  .flex.flex-wrap > div {
+    min-width: 0;
+  }
+
+  /* Forms em mobile: inputs e dropdowns devem quebrar corretamente */
+  .flex.flex-wrap.gap-3 > div {
+    flex: 1 1 100% !important;
+  }
+
+  .flex.flex-column > div .p-inputtext,
+  .flex.flex-column > div .p-inputnumber,
+  .flex.flex-column > div .p-dropdown {
+    width: 100% !important;
+  }
+
+  /* Card interno com flex-wrap em mobile */
+  .card.p-3 .flex.flex-wrap {
+    flex-direction: column;
+  }
+
+  .card.p-3 .flex.flex-wrap > div {
+    flex: 1 1 100% !important;
+    min-width: 0;
+  }
+
+  /* DataTable responsivo */
+  .p-datatable-wrapper {
+    overflow-x: auto;
+  }
+}
+
+/* Tablet e menores */
+@media (max-width: 1024px) {
+  .layout-content {
+    overflow-x: hidden;
+  }
+
+  .grid > div[class*="col-"] {
+    width: 100%;
+    padding: 0.5rem;
+  }
+}
+
+/* Redução de tamanho de fontes no mobile */
+@media (max-width: 768px) {
+  /* Geral */
+  html {
+    font-size: 13px;
+  }
+
+  body,
+  label,
+  span,
+  p {
+    font-size: 0.9rem;
+  }
+
+  /* Headings */
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  /* App title e topbar */
+  .app-title {
+    font-size: 0.95rem;
+  }
+
+  /* Menu */
+  .layout-menu-section-label {
+    font-size: 0.65rem;
+  }
+
+  .layout-menu-link {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* PrimeVue components */
+  .p-card {
+    font-size: 0.9rem;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+
+  .p-inputtext,
+  .p-inputnumber-input,
+  .p-dropdown {
+    font-size: 0.85rem;
+  }
+
+  .p-button {
+    font-size: 0.85rem;
+  }
+
+  /* Cards e componentes */
+  .card {
+    font-size: 0.9rem;
+  }
+
+  /* Notificações */
+  .notification-item {
+    font-size: 9pt;
+  }
+
+  .notification-title {
+    font-size: 9pt;
+  }
+
+  .notification-detail {
+    font-size: 0.65rem;
+  }
+
+  .notification-date {
+    font-size: 0.7rem;
+  }
+
+  .notifications-header {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile extra pequeno (< 480px) */
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+
+  body,
+  label,
+  span,
+  p {
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-size: 1.1rem;
+  }
+
+  h2 {
+    font-size: 0.95rem;
+  }
+
+  .app-title {
+    font-size: 0.85rem;
+  }
+
+  .layout-menu-link {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th {
+    font-size: 0.7rem;
+    padding: 0.35rem;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    font-size: 0.7rem;
+    padding: 0.3rem;
+  }
+}

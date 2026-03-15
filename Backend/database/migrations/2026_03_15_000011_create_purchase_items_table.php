@@ -15,10 +15,13 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('purchase_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->unsignedInteger('quantity');
-            $table->decimal('unit_cost', 10, 2);
-            $table->decimal('total_cost', 12, 2);
+            $table->unsignedInteger('quantidade');
+            $table->decimal('preco_unitario', 10, 2);
+            $table->decimal('total_custo', 12, 2);
             $table->timestamps();
+
+            // Índices
+            $table->index(['product_id', 'purchase_id']);
         });
     }
 

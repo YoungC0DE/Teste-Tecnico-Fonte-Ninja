@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Carbon;
 
 class SaleController extends Controller
 {
@@ -43,12 +44,24 @@ class SaleController extends Controller
         if ($request->has('search')) {
             $search = trim(strtolower($request->input('search')));
             $sales = Sale::whereLike('id', "%$search%")
-                ->orWhereLike('total_value', "%$search%")
+                ->orWhereLike('valor_total', "%$search%")
                 ->with('items.product')
                 ->paginate();
         } else {
             $sales = Sale::with('items.product')->paginate();
         }
+
+        // Adaptar saída para os campos esperados pelo frontend
+        $sales->getCollection()->transform(function (Sale $sale) {
+            $data = $sale->toArray();
+            $data["created_at"] = Carbon::parse($sale->created_at)->format('Y-m-d');
+            $data["updated_at"] = Carbon::parse($sale->updated_at)->format('Y-m-d');
+
+            // Formatação monetária para exibição (R$ 100,00)
+            $data["valor_total"] = 'R$ ' . number_format((float) $sale->valor_total, 2, ',', '.');
+
+            return $data;
+        });
 
         return $this->jsonResponse($sales);
     }
@@ -87,10 +100,11 @@ class SaleController extends Controller
      *
      * @param StoreSaleRequest $request
      *
-     * @bodyParam items array required Lista de itens da venda.
-     * @bodyParam items[].product_id integer required ID do produto. Example: 5
-     * @bodyParam items[].quantity integer required Quantidade vendida do produto. Example: 10
-     * @bodyParam items[].unit_price number required Preço unitário de venda do produto. Example: 50.00
+     * @bodyParam cliente string required Nome do cliente. Example: "Fulano da Silva".
+     * @bodyParam produtos array required Lista de produtos da venda.
+     * @bodyParam produtos[].id integer required ID do produto. Example: 5
+     * @bodyParam produtos[].quantidade integer required Quantidade vendida do produto. Example: 10
+     * @bodyParam produtos[].preco_unitario number required Preço unitário de venda do produto. Example: 50.00
      *
      * @throws \Exception
      *
@@ -102,50 +116,56 @@ class SaleController extends Controller
 
         try {
             $sale = Sale::create([
-                'total_value' => 0
+                'valor_total' => 0,
+                'cliente' => $request->input('cliente'),
             ]);
 
             $total = 0;
-            foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
+            $profitTotal = 0;
+
+            foreach ($request->input('produtos', []) as $item) {
+                $product = Product::find($item['id']);
 
                 if (empty($product)) {
-                    throw new \Exception("Produto com ID {$item['product_id']} não encontrado.");
+                    throw new \Exception("Produto com ID {$item['id']} não encontrado.");
                 }
 
-                $quantity = $item['quantity'];
-                $unitPrice = $item['unit_price'];
+                $quantity = $item['quantidade'];
+                $unitPrice = $item['preco_unitario'];
 
-                if ($product->stock < $quantity) {
-                    throw new \Exception("Estoque insuficiente para o produto {$product->name}. Estoque disponível: {$product->stock}");
+                if ($product->estoque < $quantity) {
+                    throw new \Exception("Estoque insuficiente para o produto {$product->nome}. Estoque disponível: {$product->estoque}");
                 }
 
-                $unitCost = $product->average_cost;
+                $unitCost = $product->custo_medio;
                 $totalPrice = $quantity * $unitPrice;
                 $profit = ($unitPrice - $unitCost) * $quantity;
 
                 SaleItem::create([
                     'sale_id' => $sale->id,
                     'product_id' => $product->id,
-                    'quantity' => $quantity,
-                    'unit_price' => $unitPrice,
-                    'total_price' => $totalPrice,
-                    'unit_cost' => $unitCost,
-                    'profit' => $profit
+                    'quantidade' => $quantity,
+                    'preco_unitario' => $unitPrice,
+                    'total_preco' => $totalPrice,
+                    'custo_unitario' => $unitCost,
+                    'lucro' => $profit
                 ]);
 
-                $product->decrement('stock', $quantity);
+                $product->decrement('estoque', $quantity);
                 $total += $totalPrice;
+                $profitTotal += $profit;
             }
 
             $sale->update([
-                'total_value' => $total
+                'valor_total' => $total
             ]);
             DB::commit();
 
-            return $this->jsonResponse(
-                $sale->load('items.product'),
-                Response::HTTP_CREATED);
+            return $this->jsonResponse([
+                'sale' => $sale->load('items.product'),
+                'total' => $total,
+                'profit' => $profitTotal,
+            ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
 

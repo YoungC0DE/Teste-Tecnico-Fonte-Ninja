@@ -1,0 +1,54 @@
+/* FORM STYLES */
+
+/* Garante que inputs tenham 100% de largura */
+input,
+textarea,
+select,
+.p-inputtext,
+.p-inputnumber,
+.p-dropdown {
+  width: 100%;
+}
+
+/* Flex layout para labels e inputs */
+.flex.flex-column {
+  width: 100%;
+}
+
+.flex.flex-column > .p-inputtext,
+.flex.flex-column > .p-inputnumber,
+.flex.flex-column > .p-dropdown,
+.flex.flex-column input,
+.flex.flex-column textarea,
+.flex.flex-column select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Card com padding */
+.card.p-3 {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Flex wrap com itens de formulário */
+.flex.flex-wrap.gap-3 > [class*="flex-column"] {
+  width: 100%;
+}
+
+.flex.flex-wrap.gap-3 > [class*="flex-column"] input,
+.flex.flex-wrap.gap-3 > [class*="flex-column"] .p-inputtext,
+.flex.flex-wrap.gap-3 > [class*="flex-column"] .p-inputnumber,
+.flex.flex-wrap.gap-3 > [class*="flex-column"] .p-dropdown {
+  width: 100%;
+}
+
+/* Garante que botões também se adaptem em mobile */
+.flex.gap-3 > .p-button {
+  flex-shrink: 0;
+}
+
+/* Remove overflow hidden que pode quebrar dropdowns */
+.flex.flex-wrap {
+  overflow: visible;
+}

@@ -9,7 +9,8 @@ class Purchase extends Model
     public const TABLE = 'purchases';
 
     protected $fillable = [
-        'total_value',
+        'valor_total',
+        'fornecedor',
     ];
 
     public function items()

@@ -1,10 +1,15 @@
-# ERP Inventory System
+# ERP Estoque
 
-Projeto fullstack para gerenciamento de **produtos, compras e vendas**, composto por **Frontend** e **Backend**, orquestrados via Docker.
+Projeto **fullstack** para gerenciamento de **produtos, compras e vendas**, composto por **Backend (API REST)** e **Frontend**, orquestrados com **Docker**.
 
-## 📦 Estrutura do Projeto
+O sistema permite registrar operações de estoque e acompanhar o impacto dessas movimentações no **custo médio, estoque disponível e lucro obtido nas vendas**.
 
-```
+> ⚠️ Este projeto foi desenvolvido e testado em ambiente **WSL (Windows Subsystem for Linux)** utilizando **Ubuntu no Windows**.
+
+---
+
+# 📦 Estrutura do Projeto
+
 .
 ├── Backend
 │   ├── app
@@ -22,38 +27,37 @@ Projeto fullstack para gerenciamento de **produtos, compras e vendas**, composto
 ├── docker-compose.yml
 ├── import_file_endpoints_insomnia.json
 └── README.md
-```
-
-## 🛠 Tecnologias
-
-### Backend
-
-* Laravel 12
-* PHP 8.4
-* MySQL
-* Docker
-
-### Frontend
-
-* Vue 3
-* Docker
-
-### Ferramentas
-
-* Docker
-* Docker Compose
-* Insomnia / Postman
 
 ---
 
-# 🚀 Como executar o projeto
+# 🛠 Tecnologias Utilizadas
+
+## Backend
+
+- Laravel 12
+- PHP 8.4
+- MySQL
+- Redis
+
+## Frontend
+
+- Vue 3
+- PrimeVue
+
+## Ferramentas
+
+- Docker
+- Docker Compose
+- Insomnia / Postman
+
+---
+
+# 🚀 Executando o Projeto
 
 ## 1️⃣ Clonar o repositório
 
-```
 git clone https://github.com/YoungC0DE/Teste-Tecnico-Fonte-Ninja.git
 cd Teste-Tecnico-Fonte-Ninja
-```
 
 ---
 
@@ -61,12 +65,10 @@ cd Teste-Tecnico-Fonte-Ninja
 
 Tanto o **Frontend** quanto o **Backend** possuem arquivos `.env`.
 
-Crie os arquivos com base nos exemplos:
+Crie os arquivos a partir dos exemplos fornecidos:
 
-```
-Backend/.env.example  → Backend/.env
+Backend/.env.example  → Backend/.env  
 Frontend/.env.example → Frontend/.env
-```
 
 ---
 
@@ -74,81 +76,120 @@ Frontend/.env.example → Frontend/.env
 
 Na pasta **raiz do projeto**, execute:
 
-```
-docker-compose up -d
-```
+docker compose up -d
 
-Isso irá subir todos os serviços necessários do projeto.
+Esse comando irá iniciar todos os serviços necessários:
+
+- API Laravel
+- Banco de dados MySQL
+- Redis
+- Frontend
 
 ---
 
-## 4️⃣ Instalar dependências do backend
+## 4️⃣ Instalar dependências do Backend
 
-Após subir os containers, entre no container da API:
+Após subir os containers, acesse o container da API:
 
-```
 docker compose exec api bash
-```
 
 Dentro do container, execute:
 
-```
 composer install -o
-```
+
+---
+
+# 📚 Documentação da API
+
+A documentação da API é gerada automaticamente utilizando **Scribe**.
+
+Após iniciar o projeto, ela pode ser acessada no navegador:
+
+http://localhost:8000/docs
+
+Nesta página é possível visualizar:
+
+- Lista de todos os endpoints
+- Parâmetros de requisição
+- Exemplos de payload
+- Exemplos de respostas da API
+
+A documentação é gerada diretamente a partir dos **Controllers** e **Requests**, garantindo que esteja sempre sincronizada com o código da aplicação.
 
 ---
 
 # 🔎 Testando a API
 
-Para testar os endpoints da API:
+Para testar os endpoints manualmente:
 
 1. Abra o **Insomnia** ou **Postman**
 2. Importe o arquivo:
 
-```
 import_file_endpoints_insomnia.json
-```
 
-Esse arquivo está localizado **na raiz do projeto** e contém todos os endpoints da API.
-
----
-
-# 📚 Funcionalidades da API
-
-A API permite:
-
-* Cadastro de produtos
-* Registro de compras
-* Registro de vendas
-* Controle de estoque
-* Cálculo de lucro
+O arquivo está localizado **na raiz do projeto** e contém uma coleção com os endpoints disponíveis na API.
 
 ---
 
-# 🧪 Estrutura da API
+# 🧪 Testando o Frontend
 
-A API segue o padrão **REST** e utiliza:
+Após iniciar o ambiente local, o frontend pode ser acessado em:
 
-* Controllers
-* Requests para validação
-* Models
-* Versionamento de rotas (`/api/v1`)
+http://localhost:5173
 
-## 📚 Documentação da API (Backend)
+A interface permite:
 
-A documentação completa da API é gerada automaticamente utilizando o **Scribe**.
+- Cadastro de produtos
+- Visualização do estoque
+- Registro de compras
+- Registro de vendas
 
-Após subir os containers do projeto, a documentação pode ser acessada diretamente no navegador pela url **http://localhost:8000/docs**
+---
 
-Nessa página você encontrará:
+# ⚙️ Funcionalidades da API
 
-- Lista de todos os endpoints disponíveis
-- Parâmetros de requisição
-- Exemplos de payloads
-- Exemplos de respostas da API
+A API fornece endpoints para:
 
-A documentação é gerada automaticamente a partir dos **Controllers** e **Requests** do backend, garantindo que os exemplos e parâmetros estejam sempre atualizados com o código da aplicação.
+- Cadastro de produtos
+- Registro de compras
+- Registro de vendas
+- Controle de estoque
+- Cálculo automático de custo médio
+- Cálculo de lucro nas vendas
+
+---
+
+# 🧩 Estrutura da API
+
+A API segue o padrão **REST** e possui:
+
+- Controllers
+- Requests para validação
+- Models
+- Versionamento de rotas (`/api/v1`)
+
+---
+
+# 🎨 Interface do Frontend
+
+O layout do frontend foi **inspirado no template Sakai**, disponibilizado pelo **PrimeVue**, adaptado para atender às necessidades deste projeto.
+
+O objetivo foi manter uma interface **simples, limpa e focada em produtividade**, comum em sistemas administrativos e ERPs.
+
+---
+
+# 🤖 Uso de Inteligência Artificial no desenvolvimento
+
+Durante o desenvolvimento do projeto foram utilizadas ferramentas de apoio baseadas em **Inteligência Artificial**, incluindo:
+
+- GitHub Copilot
+- ChatGPT
+- Cursor
+
+Essas ferramentas foram utilizadas como **suporte para produtividade, revisão de código e esclarecimento de dúvidas técnicas**, sem geração automática integral do projeto.
+
+---
 
 # 📄 Licença
 
-Projeto criado para fins educacionais / avaliação técnica.
+Projeto desenvolvido para **fins educacionais e avaliação técnica**.

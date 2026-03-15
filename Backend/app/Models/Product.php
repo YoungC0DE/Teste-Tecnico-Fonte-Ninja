@@ -9,9 +9,9 @@ class Product extends Model
     public const TABLE = 'products';
 
     protected $fillable = [
-        "name",
-        "sku",
-        "stock",
-        "average_cost",
+        "nome",
+        "estoque",
+        "custo_medio",
+        "preco_venda",
     ];
 }

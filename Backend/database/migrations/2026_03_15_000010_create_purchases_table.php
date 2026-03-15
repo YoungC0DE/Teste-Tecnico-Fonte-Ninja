@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Sale;
+use App\Models\Purchase;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(Sale::TABLE, function (Blueprint $table) {
+        Schema::create(Purchase::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->decimal('total_value', 12, 2)->default(0);
+            $table->decimal('valor_total', 12, 2)->default(0);
+            $table->string('fornecedor')->nullable();
             $table->timestamps();
+
+            // Índices
+            $table->index('fornecedor');
+            $table->index('valor_total');
         });
     }
 
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(Sale::TABLE);
+        Schema::dropIfExists(Purchase::TABLE);
     }
 };

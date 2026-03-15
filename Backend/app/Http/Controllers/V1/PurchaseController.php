@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,12 +44,24 @@ class PurchaseController extends Controller
         if ($request->has('search')) {
             $search = trim(strtolower($request->input('search')));
             $purchases = Purchase::whereLike('id', "%$search%")
-                ->orWhereLike('total_value', "%$search%")
+                ->orWhereLike('valor_total', "%$search%")
                 ->with('items.product')
                 ->paginate();
         } else {
             $purchases = Purchase::with('items.product')->paginate();
         }
+
+        // Adaptar saída para os campos esperados pelo frontend
+        $purchases->getCollection()->transform(function (Purchase $purchase) {
+            $data = $purchase->toArray();
+            $data["created_at"] = Carbon::parse($purchase->created_at)->format('Y-m-d');
+            $data["updated_at"] = Carbon::parse($purchase->updated_at)->format('Y-m-d');
+
+            // Formatação monetária para exibição (R$ 100,00)
+            $data["valor_total"] = 'R$ ' . number_format((float) $purchase->valor_total, 2, ',', '.');
+
+            return $data;
+        });
 
         return $this->jsonResponse($purchases);
     }
@@ -81,10 +94,11 @@ class PurchaseController extends Controller
      *
      * @param StorePurchaseRequest $request
      *
-     * @bodyParam items array required Lista de itens da compra.
-     * @bodyParam items[].product_id integer required ID do produto. Example: 5
-     * @bodyParam items[].quantity integer required Quantidade comprada do produto. Example: 10
-     * @bodyParam items[].unit_cost number required Custo unitário do produto na compra. Example: 25.50
+     * @bodyParam fornecedor string required Nome do fornecedor. Example: "Fornecedor X".
+     * @bodyParam produtos array required Lista de produtos da compra.
+     * @bodyParam produtos[].id integer required ID do produto. Example: 5
+     * @bodyParam produtos[].quantidade integer required Quantidade comprada do produto. Example: 10
+     * @bodyParam produtos[].preco_unitario number required Preço unitário da compra. Example: 25.50
      *
      * @throws \Exception
      *
@@ -96,32 +110,33 @@ class PurchaseController extends Controller
 
         try {
             $purchase = Purchase::create([
-                'total_value' => 0
+                'valor_total' => 0,
+                'fornecedor' => $request->input('fornecedor'),
             ]);
 
             $total = 0;
-            foreach ($request->items as $item) {
-                $product = Product::find($item['product_id']);
+            foreach ($request->input('produtos', []) as $item) {
+                $product = Product::find($item['id']);
 
                 if (empty($product)) {
-                    throw new \Exception("Produto com ID {$item['product_id']} não encontrado.");
+                    throw new \Exception("Produto com ID {$item['id']} não encontrado.");
                 }
 
-                $quantity = $item['quantity'];
-                $unitCost = $item['unit_cost'];
+                $quantity = $item['quantidade'];
+                $unitCost = $item['preco_unitario'];
                 $totalCost = $quantity * $unitCost;
 
                 PurchaseItem::create([
                     'purchase_id' => $purchase->id,
                     'product_id' => $product->id,
-                    'quantity' => $quantity,
-                    'unit_cost' => $unitCost,
-                    'total_cost' => $totalCost
+                    'quantidade' => $quantity,
+                    'preco_unitario' => $unitCost,
+                    'total_custo' => $totalCost,
                 ]);
 
                 // cálculo custo médio
-                $currentStock = $product->stock;
-                $currentAverageCost = $product->average_cost;
+                $currentStock = $product->estoque;
+                $currentAverageCost = $product->custo_medio;
 
                 $newStock = $currentStock + $quantity;
 
@@ -130,15 +145,15 @@ class PurchaseController extends Controller
                     / $newStock;
 
                 $product->update([
-                    'stock' => $newStock,
-                    'average_cost' => $newAverageCost
+                    'estoque' => $newStock,
+                    'custo_medio' => $newAverageCost
                 ]);
 
                 $total += $totalCost;
             }
 
             $purchase->update([
-                'total_value' => $total
+                'valor_total' => $total
             ]);
 
             DB::commit();

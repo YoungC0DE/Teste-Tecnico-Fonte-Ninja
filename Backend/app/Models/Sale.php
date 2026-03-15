@@ -9,7 +9,8 @@ class Sale extends Model
     public const TABLE = 'sales';
 
     protected $fillable = [
-        'total_value',
+        'valor_total',
+        'cliente',
     ];
 
     public function items()

@@ -19,12 +19,15 @@ return new class extends Migration {
             $table->foreignId('product_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->unsignedInteger('quantity');
-            $table->decimal('unit_price', 10, 2);
-            $table->decimal('total_price', 12, 2);
-            $table->decimal('unit_cost', 10, 2);
-            $table->decimal('profit', 12, 2);
+            $table->unsignedInteger('quantidade');
+            $table->decimal('preco_unitario', 10, 2);
+            $table->decimal('total_preco', 12, 2);
+            $table->decimal('custo_unitario', 10, 2);
+            $table->decimal('lucro', 12, 2);
             $table->timestamps();
+
+            // Índices
+            $table->index(['product_id', 'sale_id']);
         });
     }
 
