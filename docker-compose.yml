@@ -9,7 +9,7 @@ services:
     volumes:
       - ./Backend:/var/www
     depends_on:
-      - mysql
+      - postgres
       - redis
 
   vue:
@@ -23,16 +23,15 @@ services:
       - ./Frontend:/app
       - /app/node_modules
 
-  mysql:
-    container_name: mysql
-    image: mysql:8
+  postgres:
+    container_name: postgres
+    image: postgres:latest
     environment:
-      MYSQL_DATABASE: estoque
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: ninja
-      MYSQL_USER: ninja
+      POSTGRES_DB: estoque
+      POSTGRES_USER: ninja
+      POSTGRES_PASSWORD: ninja
     ports:
-      - "3306:3306"
+      - "5432:5432"
 
   redis:
     container_name: redis

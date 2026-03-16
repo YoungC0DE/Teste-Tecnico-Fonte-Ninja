@@ -53,7 +53,7 @@ https://teste-tecnico-fonte-ninja.onrender.com/docs
 
 - Laravel 12
 - PHP 8.4
-- MySQL
+- PostgreSQL
 - Redis
 
 ## Frontend
@@ -98,7 +98,7 @@ docker compose up -d
 Esse comando irá iniciar todos os serviços necessários:
 
 - API Laravel
-- Banco de dados MySQL
+- Banco PostgreSQL
 - Redis
 - Frontend
 
