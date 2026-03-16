@@ -26,7 +26,7 @@ https://teste-tecnico-fonte-ninja.onrender.com/docs
 ---
 
 # 📦 Estrutura do Projeto
-
+```
 .
 ├── Backend
 │   ├── app
@@ -44,7 +44,7 @@ https://teste-tecnico-fonte-ninja.onrender.com/docs
 ├── docker-compose.yml
 ├── import_file_endpoints_insomnia.json
 └── README.md
-
+```
 ---
 
 # 🛠 Tecnologias Utilizadas
@@ -111,8 +111,9 @@ Após subir os containers, acesse o container da API:
 docker compose exec api bash
 
 Dentro do container, execute:
-
+```
 composer install -o
+```
 
 ---
 
@@ -161,12 +162,12 @@ Abra:
 Manage Environments
 
 E adicione:
-
+```
 {
   "url_base_local": "http://localhost:8000/api/v1",
   "url_base_hml": "https://teste-tecnico-fonte-ninja.onrender.com/api/v1"
 }
-
+```
 ---
 
 # 🧪 Testando o Frontend
