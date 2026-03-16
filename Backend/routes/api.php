@@ -36,12 +36,15 @@ Route::post('/render_terminal', function () {
     );
 
     $command = request('command');
+    $force = request('force');
 
     abort_unless($command, 400, 'Command not provided');
 
-    Artisan::call($command, [
-        '--force' => true
-    ]);
+    if ($force) {
+        Artisan::call($command, ['--force' => true]);
+    } else {
+        Artisan::call($command);
+    }
 
     return response()->json([
         'command' => $command,
