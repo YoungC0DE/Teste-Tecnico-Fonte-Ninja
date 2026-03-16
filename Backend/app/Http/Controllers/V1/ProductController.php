@@ -39,7 +39,7 @@ class ProductController extends Controller
 
         $cacheKey = "produtos:page:{$page}:per_page:{$perPage}:search:{$search}";
 
-        $products = Cache::tags(['produtos'])->remember($cacheKey, 60, function () use ($search, $perPage) {
+        $products = Cache::remember($cacheKey, 60, function () use ($search, $perPage) {
             $query = Product::query();
 
             if ($search !== '') {
@@ -94,7 +94,7 @@ class ProductController extends Controller
             ]);
 
             // Limpa cache para garantir que a lista de produtos seja atualizada
-            Cache::tags(['produtos'])->flush();
+            Cache::flush();
 
             return $this->jsonResponse($product, Response::HTTP_CREATED);
         } catch (\Exception $e) {
@@ -118,7 +118,7 @@ class ProductController extends Controller
      */
     public function show(string $productId): JsonResponse
     {
-        $product = Cache::tags(['produtos'])->remember("produto:{$productId}", 60, function () use ($productId) {
+        $product = Cache::remember("produto:{$productId}", 60, function () use ($productId) {
             return Product::find($productId);
         });
 
@@ -164,7 +164,7 @@ class ProductController extends Controller
         ]);
 
         // Limpa cache para garantir que os dados atualizados sejam retornados
-        Cache::tags(['produtos'])->flush();
+        Cache::flush();
 
         return $this->jsonResponse($product);
     }
@@ -193,7 +193,7 @@ class ProductController extends Controller
         $product->delete();
 
         // Limpa cache para garantir que a lista de produtos seja atualizada
-        Cache::tags(['produtos'])->flush();
+        Cache::flush();
 
         return $this->jsonResponse([], Response::HTTP_NO_CONTENT);
     }
