@@ -13,13 +13,13 @@ O sistema permite registrar operações de estoque e acompanhar o impacto dessas
 O projeto também está disponível online para testes:
 
 Frontend  
-https://teste-tecnico-fonte-ninja.vercel.app/
+https://erp_estoque.vercel.app/
 
 API  
-https://teste-tecnico-fonte-ninja.onrender.com
+https://erp_estoque.onrender.com
 
 Documentação da API  
-https://teste-tecnico-fonte-ninja.onrender.com/docs
+https://erp_estoque.onrender.com/docs
 
 > ⚠️ O primeiro acesso à API pode levar alguns segundos, pois o Render hiberna serviços gratuitos após período de inatividade.
 
@@ -127,7 +127,7 @@ http://localhost:8000/docs
 
 Ambiente de homologação
 
-https://teste-tecnico-fonte-ninja.onrender.com/docs
+https://erp_estoque.onrender.com/docs
 
 Nesta página é possível visualizar:
 
@@ -165,7 +165,7 @@ E adicione:
 ```
 {
   "url_base_local": "http://localhost:8000/api/v1",
-  "url_base_hml": "https://teste-tecnico-fonte-ninja.onrender.com/api/v1"
+  "url_base_hml": "https://erp_estoque.onrender.com/api/v1"
 }
 ```
 ---
@@ -178,7 +178,7 @@ http://localhost:5173
 
 Ambiente de homologação
 
-https://teste-tecnico-fonte-ninja.vercel.app/
+https://erp_estoque.vercel.app/
 
 A interface permite:
 
