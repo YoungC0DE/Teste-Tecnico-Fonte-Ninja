@@ -119,7 +119,7 @@ composer install -o
 
 # 📚 Documentação da API
 
-A documentação da API é gerada automaticamente utilizando **Scribe**.
+A documentação da API é gerada automaticamente utilizando **Scramble**.
 
 Ambiente local
 
