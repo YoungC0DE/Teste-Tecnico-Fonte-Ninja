@@ -13,13 +13,13 @@ O sistema permite registrar operações de estoque e acompanhar o impacto dessas
 O projeto também está disponível online para testes:
 
 Frontend  
-https://erp_estoque.vercel.app/
+https://erp-estoque-chi.vercel.app/
 
 API  
 https://erp_estoque.onrender.com
 
 Documentação da API  
-https://erp_estoque.onrender.com/docs
+https://erp-estoque.onrender.com/docs/api
 
 > ⚠️ O primeiro acesso à API pode levar alguns segundos, pois o Render hiberna serviços gratuitos após período de inatividade.
 
@@ -125,10 +125,6 @@ Ambiente local
 
 http://localhost:8000/docs
 
-Ambiente de homologação
-
-https://erp_estoque.onrender.com/docs
-
 Nesta página é possível visualizar:
 
 - Lista de todos os endpoints
@@ -175,10 +171,6 @@ E adicione:
 Ambiente local
 
 http://localhost:5173
-
-Ambiente de homologação
-
-https://erp_estoque.vercel.app/
 
 A interface permite:
 
