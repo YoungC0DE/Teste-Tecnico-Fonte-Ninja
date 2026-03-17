@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "title": "EstoqueNinja",
+        "title": "ERP Estoque",
         "version": "0.0.1"
     },
     "servers": [

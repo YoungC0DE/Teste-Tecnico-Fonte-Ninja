@@ -73,8 +73,8 @@ https://teste-tecnico-fonte-ninja.onrender.com/docs
 
 ## 1️⃣ Clonar o repositório
 
-git clone https://github.com/YoungC0DE/Teste-Tecnico-Fonte-Ninja.git  
-cd Teste-Tecnico-Fonte-Ninja
+git clone https://github.com/YoungC0DE/ERP_Estoque.git
+cd ERP_Estoque
 
 ---
 
